@@ -28,10 +28,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.android.gms.location.FusedLocationProviderClient
+
+const val API_KEY = "b5ec8672380323fa30103d985789a8a2"
+const val base_url="https://api.openweathermap.org/"
 
 @Preview(showSystemUi = true)
 @Composable
 private fun WeatherScreen() {
+
     Box(
         Modifier
             .fillMaxSize()
