@@ -1,5 +1,6 @@
 package com.example.weatherapp
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -18,6 +19,8 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -28,14 +31,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.google.android.gms.location.FusedLocationProviderClient
+import com.example.weatherapp.viewmodel.WeatherViewModel
+
 
 const val API_KEY = "b5ec8672380323fa30103d985789a8a2"
-const val base_url="https://api.openweathermap.org/"
 
 @Preview(showSystemUi = true)
 @Composable
-private fun WeatherScreen() {
+fun WeatherScreen() {
+    val viewModel=WeatherViewModel()
+    viewModel.getData(lat!!, long!!)
+    val data by viewModel.weatherData.collectAsState()
+    Log.d("ApiResponse","Data:$data")
+
 
     Box(
         Modifier

@@ -13,12 +13,13 @@ import com.example.weatherapp.ui.theme.WeatherAppTheme
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 
+var lat: Double? = 34.052235
+var long: Double? = -118.243683
 
 class MainActivity : ComponentActivity() {
 
     private lateinit var fusedLocation: FusedLocationProviderClient
-    var lat: Double? = null
-    var long: Double? = null
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,7 +35,7 @@ class MainActivity : ComponentActivity() {
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     val pad = innerPadding
-
+                    WeatherScreen()
                 }
             }
         }
