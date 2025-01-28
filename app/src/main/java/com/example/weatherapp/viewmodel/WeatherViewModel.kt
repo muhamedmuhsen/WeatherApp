@@ -3,7 +3,7 @@ package com.example.weatherapp.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.weatherapp.model.WeatherResponse
-import com.example.weatherapp.model.api
+import com.example.weatherapp.model.Api
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import retrofit2.Call
@@ -25,7 +25,7 @@ class WeatherViewModel : ViewModel() {
         .addConverterFactory(GsonConverterFactory.create())
         .build()
 
-    private val callable = retrofit.create(api::class.java)
+    private val callable = retrofit.create(Api::class.java)
 
     fun getData(latAndLon: String?) {
         callable.getData(API_KEY,"$latAndLon").enqueue(

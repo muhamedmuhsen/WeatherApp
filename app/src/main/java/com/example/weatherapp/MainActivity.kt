@@ -34,9 +34,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             WeatherAppTheme {
-
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    val pad = innerPadding
+                    val pa=innerPadding
                     WeatherScreen(viewModel)
                 }
             }

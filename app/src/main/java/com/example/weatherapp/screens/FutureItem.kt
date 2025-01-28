@@ -12,33 +12,33 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.weatherapp.R
+import com.example.weatherapp.model.WeatherResponse
 
-@Preview(showSystemUi = true, device = "id:pixel_8")
 @Composable
-fun FutureItem() {
+fun FutureItem(data: WeatherResponse, index: Int) {
+    val day = getDayOfWeek(data.forecast.forecastday[index].date.split(" ")[0]).slice(0..3)
+    val icon = weatherState(data.forecast.forecastday[index].day.condition.text)
     Row(
         Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp, horizontal = 24.dp),
         verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween // This will spread items across the row
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
-            text = "Sat", fontSize = 14.sp, color = Color.White
+            text = day, fontSize = 14.sp, color = Color.White
         )
         Image(
-            painter = painterResource(R.drawable.rain),
+            painter = painterResource(icon),
             contentDescription = null,
             modifier = Modifier
                 .padding(start = 32.dp)
                 .size(45.dp)
         )
         Text(
-            text = "Storm",
+            text = data.forecast.forecastday[index].day.condition.text,
             modifier = Modifier
                 .weight(1f)
                 .padding(start = 16.dp),
@@ -47,13 +47,16 @@ fun FutureItem() {
         )
 
         Text(
-            text = "21",
+            text = data.forecast.forecastday[index].day.maxtemp_c.toString() + "°",
             modifier = Modifier.padding(end = 16.dp),
             fontSize = 14.sp,
             color = Color.White
         )
         Text(
-            text = "7", modifier = Modifier, fontSize = 14.sp, color = Color.White
+            text = data.forecast.forecastday[index].day.mintemp_c.toString() + "°",
+            modifier = Modifier,
+            fontSize = 14.sp,
+            color = Color.White
         )
     }
 }

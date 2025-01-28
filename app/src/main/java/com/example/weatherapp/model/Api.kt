@@ -5,8 +5,8 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 
-interface api {
-    @GET("/v1/current.json")
+interface Api {
+    @GET("/v1/forecast.json")
     fun getData(
         @Query("key")apiKey:String,
         @Query("q") latAndLon: String

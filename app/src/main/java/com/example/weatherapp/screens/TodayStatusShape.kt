@@ -19,10 +19,12 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import com.example.weatherapp.R
+import androidx.compose.ui.unit.sp
+import com.example.weatherapp.model.WeatherResponse
 
 @Composable
-fun TodayStatusShape() {
+fun TodayStatusShape(data: WeatherResponse, hour: Int) {
+    val icon = weatherState(data.forecast.forecastday[0].hour[hour].condition.text)
     Box(
         Modifier
             .padding(8.dp)
@@ -38,15 +40,22 @@ fun TodayStatusShape() {
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.SpaceAround
         ) {
-            Text(text = "7 am", color = Color.White)
+            Text(
+                text = data.forecast.forecastday[0].hour[hour].time.split(" ")[1] + " AM",
+                color = Color.White,
+                fontSize = 14.sp
+            )
             Image(
-                painter = painterResource(R.drawable.rain),
+                painter = painterResource(icon),
                 contentDescription = null,
                 Modifier
                     .padding(vertical = 6.dp)
                     .size(36.dp)
             )
-            Text(text = "7 am", color = Color.White)
+            Text(
+                text = data.forecast.forecastday[0].hour[hour].temp_c.toString() + "°",
+                color = Color.White
+            )
         }
     }
 }

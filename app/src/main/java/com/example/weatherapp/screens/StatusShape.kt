@@ -21,9 +21,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.weatherapp.R
+import com.example.weatherapp.model.WeatherResponse
 
 @Composable
-fun StatusShape() {
+fun StatusShape(data: WeatherResponse) {
     Box(
         Modifier
             .fillMaxWidth(0.95f)
@@ -50,7 +51,7 @@ fun StatusShape() {
                         .size(36.dp)
                 )
                 Text(
-                    text = "%",
+                    text = data.forecast.forecastday[0].day.daily_chance_of_rain.toString() + "%",
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(vertical = 8.dp)
@@ -67,7 +68,7 @@ fun StatusShape() {
                     Modifier.size(36.dp)
                 )
                 Text(
-                    text = " km/h",
+                    text = data.current.wind_kph.toString() + " km/h",
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(vertical = 8.dp)
@@ -86,7 +87,7 @@ fun StatusShape() {
                         .size(36.dp)
                 )
                 Text(
-                    text = " %",
+                    text = data.current.humidity.toString() + " %",
                     color = Color.White,
                     fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(vertical = 8.dp)
