@@ -1,14 +1,14 @@
 package com.example.weatherapp.model
 
-import com.example.weatherapp.API_KEY
 import retrofit2.Call
 import retrofit2.http.GET
-import retrofit2.http.Path
+import retrofit2.http.Query
+
 
 interface api {
-    @GET("data/2.5/weather?lat={latitude}&lon={longitude}&appid=${API_KEY}")
+    @GET("/v1/current.json")
     fun getData(
-        @Path("latitude") lat: Double,
-        @Path("longitude") lon: Double,
-    ): Call<WeatherData>
+        @Query("key")apiKey:String,
+        @Query("q") latAndLon: String
+    ): Call<WeatherResponse>
 }

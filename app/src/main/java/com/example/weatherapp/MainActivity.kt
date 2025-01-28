@@ -9,18 +9,19 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.ui.Modifier
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.ViewModelProvider
+import com.example.weatherapp.screens.WeatherScreen
 import com.example.weatherapp.ui.theme.WeatherAppTheme
+import com.example.weatherapp.viewmodel.WeatherViewModel
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 
-var lat: Double? = 34.052235
-var long: Double? = -118.243683
+var lat: String? = "34.052235"
+var lon: String? = "-118.243683"
 
 class MainActivity : ComponentActivity() {
 
     private lateinit var fusedLocation: FusedLocationProviderClient
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -28,6 +29,7 @@ class MainActivity : ComponentActivity() {
 
         getLocation()
 
+        val viewModel=ViewModelProvider(this)[WeatherViewModel::class.java]
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
@@ -35,7 +37,7 @@ class MainActivity : ComponentActivity() {
 
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
                     val pad = innerPadding
-                    WeatherScreen()
+                    WeatherScreen(viewModel)
                 }
             }
         }
@@ -58,8 +60,8 @@ class MainActivity : ComponentActivity() {
         val loction = fusedLocation.lastLocation
         loction.addOnSuccessListener {
             if (it != null) {
-                lat = it.latitude
-                long = it.longitude
+                lat = it.latitude.toString()
+                lon = it.longitude.toString()
             }
         }
 
