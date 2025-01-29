@@ -43,18 +43,18 @@ fun TodayStatusShape(data: WeatherResponse, hour: Int) {
             Text(
                 text = data.forecast.forecastday[0].hour[hour].time.split(" ")[1] + " AM",
                 color = Color.White,
-                fontSize = 14.sp
+                fontSize = 12.sp
             )
             Image(
                 painter = painterResource(icon),
                 contentDescription = null,
                 Modifier
                     .padding(vertical = 6.dp)
-                    .size(36.dp)
+                    .size(32.dp)
             )
             Text(
                 text = data.forecast.forecastday[0].hour[hour].temp_c.toString() + "°",
-                color = Color.White
+                color = Color.White,
             )
         }
     }

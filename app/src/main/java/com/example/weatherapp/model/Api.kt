@@ -9,6 +9,7 @@ interface Api {
     @GET("/v1/forecast.json")
     fun getData(
         @Query("key")apiKey:String,
-        @Query("q") latAndLon: String
+        @Query("q") latAndLon: String,
+        @Query("days") days:String="4"
     ): Call<WeatherResponse>
 }

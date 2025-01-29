@@ -2,6 +2,7 @@ package com.example.weatherapp.screens
 
 import android.util.Log
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -13,8 +14,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -37,8 +38,7 @@ import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
 @Composable
-fun WeatherScreen(viewModel: WeatherViewModel) {
-
+fun WeatherScreen(viewModel: WeatherViewModel, scrollState: ScrollState = rememberScrollState()) {
     LaunchedEffect(key1 = true) {
         viewModel.getData("$lat,$lon")
     }
@@ -50,7 +50,7 @@ fun WeatherScreen(viewModel: WeatherViewModel) {
         val day = getDayOfWeek(data.current.last_updated.split(" ")[0])
         Scaffold { innerPadding ->
             Box(
-                Modifier
+                modifier = Modifier
                     .fillMaxSize()
                     .background(
                         brush = Brush.horizontalGradient(
@@ -61,23 +61,31 @@ fun WeatherScreen(viewModel: WeatherViewModel) {
                     )
                     .padding(innerPadding)
                     .padding(horizontal = 8.dp)
-
             ) {
-
+                // Main Content
                 Column(
-                    Modifier
-                        .fillMaxSize(),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(vertical = 16.dp),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Text(text = data.current.condition.text, color = Color.White, fontSize = 24.sp)
+                    // Current Weather
+                    Text(
+                        text = data.current.condition.text,
+                        color = Color.White,
+                        fontSize = 24.sp
+                    )
                     Image(
                         painter = painterResource(icon),
                         contentDescription = null,
-                        Modifier
+                        modifier = Modifier
                             .size(150.dp)
                             .padding(vertical = 16.dp)
                     )
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
                         Text(
                             text = "$day | ",
                             color = Color.White,
@@ -96,7 +104,10 @@ fun WeatherScreen(viewModel: WeatherViewModel) {
                         color = Color.White,
                         modifier = Modifier.padding(vertical = 12.dp)
                     )
-                    Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.Center) {
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
                         Text(
                             text = "H:" + data.forecast.forecastday[0].day.maxtemp_c + "°C",
                             color = Color.White,
@@ -109,10 +120,13 @@ fun WeatherScreen(viewModel: WeatherViewModel) {
                             fontSize = 16.sp
                         )
                     }
-                    Spacer(Modifier.height(12.dp))
-                    StatusShape(data)
-                    Spacer(Modifier.height(12.dp))
+                    Spacer(modifier = Modifier.height(12.dp))
 
+                    // Status Shape (Rain, Wind, Humidity)
+                    StatusShape(data)
+                    Spacer(modifier = Modifier.height(12.dp))
+
+                    // Today's Weather (Hourly)
                     Text(
                         text = "Today",
                         fontSize = 20.sp,
@@ -120,15 +134,18 @@ fun WeatherScreen(viewModel: WeatherViewModel) {
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.align(Alignment.Start)
                     )
-
                     LazyRow(
-                        Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(120.dp)
                     ) {
                         items(4) { index ->
                             TodayStatusShape(data, index + 6)
                         }
                     }
+                    Spacer(modifier = Modifier.height(12.dp))
 
+                    // Future Forecast (Daily)
                     Text(
                         text = "Future",
                         fontSize = 20.sp,
@@ -136,23 +153,22 @@ fun WeatherScreen(viewModel: WeatherViewModel) {
                         fontWeight = FontWeight.Bold,
                         modifier = Modifier.align(Alignment.Start)
                     )
-
-                    LazyColumn(
-                        modifier = Modifier.height(200.dp) // Adjust height as needed
+                    // Use a Column for future forecast items
+                    Column(
+                        modifier = Modifier.fillMaxWidth()
                     ) {
-                        items(3) { index ->
-                            FutureItem(data, index)
-                        }
+                        val forecastSize = data.forecast.forecastday.size
+                        Log.i("forecastSize", "size:$forecastSize")
+
+                        FutureItem(data.forecast.forecastday)
                     }
                 }
-
             }
         }
     } else {
-        Column(
-            Modifier.fillMaxSize(),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
         ) {
             CircularProgressIndicator()
         }

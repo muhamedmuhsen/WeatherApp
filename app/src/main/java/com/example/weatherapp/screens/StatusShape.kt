@@ -30,7 +30,6 @@ fun StatusShape(data: WeatherResponse) {
             .fillMaxWidth(0.95f)
             .clip(RoundedCornerShape(22.dp))
             .background(color = Color(0xff311864))
-
     ) {
         Row(
             Modifier
