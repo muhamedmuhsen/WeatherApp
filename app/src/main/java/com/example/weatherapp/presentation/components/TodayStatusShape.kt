@@ -1,4 +1,4 @@
-package com.example.weatherapp.screens
+package com.example.weatherapp.presentation.components
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -20,7 +20,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.weatherapp.model.WeatherResponse
+import com.example.weatherapp.domain.model.WeatherResponse
+import com.example.weatherapp.util.weatherState
 
 @Composable
 fun TodayStatusShape(data: WeatherResponse, hour: Int) {

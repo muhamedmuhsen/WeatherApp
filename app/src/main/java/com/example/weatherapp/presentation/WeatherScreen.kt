@@ -1,8 +1,7 @@
-package com.example.weatherapp.screens
+package com.example.weatherapp.presentation
 
 import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.ScrollState
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -15,7 +14,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -30,19 +28,20 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.weatherapp.R
-import com.example.weatherapp.lat
-import com.example.weatherapp.lon
-import com.example.weatherapp.viewmodel.WeatherViewModel
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import com.example.weatherapp.presentation.components.FutureItem
+import com.example.weatherapp.presentation.components.StatusShape
+import com.example.weatherapp.presentation.components.TodayStatusShape
+import com.example.weatherapp.util.coordinates
+import com.example.weatherapp.util.getDayOfWeek
+import com.example.weatherapp.util.weatherState
 
 @Composable
-fun WeatherScreen(viewModel: WeatherViewModel, scrollState: ScrollState = rememberScrollState()) {
+fun WeatherScreen(viewModel: WeatherViewModel) {
     LaunchedEffect(key1 = true) {
-        viewModel.getData("$lat,$lon")
+        viewModel.fetchData(coordinates)
     }
     val data = viewModel.weatherData.collectAsState().value
+    val error = viewModel.error
     Log.i("ApiResponse", "Data:$data")
 
     if (data != null) {
@@ -71,9 +70,7 @@ fun WeatherScreen(viewModel: WeatherViewModel, scrollState: ScrollState = rememb
                 ) {
                     // Current Weather
                     Text(
-                        text = data.current.condition.text,
-                        color = Color.White,
-                        fontSize = 24.sp
+                        text = data.current.condition.text, color = Color.White, fontSize = 24.sp
                     )
                     Image(
                         painter = painterResource(icon),
@@ -87,9 +84,7 @@ fun WeatherScreen(viewModel: WeatherViewModel, scrollState: ScrollState = rememb
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            text = "$day | ",
-                            color = Color.White,
-                            fontSize = 16.sp
+                            text = "$day | ", color = Color.White, fontSize = 16.sp
                         )
                         Text(
                             text = " ${data.location.localtime}".split(" ")[2],
@@ -165,10 +160,17 @@ fun WeatherScreen(viewModel: WeatherViewModel, scrollState: ScrollState = rememb
                 }
             }
         }
+    } else if (error != null) {
+        Box(
+            modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = error.toString(), color = Color.Red, fontSize = 18.sp
+            )
+        }
     } else {
         Box(
-            modifier = Modifier.fillMaxSize(),
-            contentAlignment = Alignment.Center
+            modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
         ) {
             CircularProgressIndicator()
         }
@@ -176,23 +178,6 @@ fun WeatherScreen(viewModel: WeatherViewModel, scrollState: ScrollState = rememb
 }
 
 
-fun weatherState(data: String): Int {
-    return when (data.lowercase()) {
-        "overcast", "sunny", "clear" -> R.drawable.sunny
-        "partly cloudy", "cloudy" -> R.drawable.cloudy
-        "mist", "fog", "freezing fog" -> R.drawable.windy
-        "patchy rain possible", "patchy light drizzle", "light drizzle", "patchy light rain", "light rain", "moderate rain at times", "moderate rain", "heavy rain at times", "heavy rain", "light rain shower", "moderate or heavy rain shower", "torrential rain shower" -> R.drawable.rain
-        "patchy snow possible", "patchy sleet possible", "patchy freezing drizzle possible", "blowing snow", "blizzard", "patchy light snow", "light snow", "patchy moderate snow", "moderate snow", "patchy heavy snow", "heavy snow", "light snow showers", "moderate or heavy snow showers" -> R.drawable.snowy
-        "thundery outbreaks possible", "patchy light rain with thunder", "moderate or heavy rain with thunder", "patchy light snow with thunder", "moderate or heavy snow with thunder" -> R.drawable.storm
-        else -> R.drawable.sunny
-    }
-}
 
 
-fun getDayOfWeek(dateString: String): String {
-    val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
 
-    val date = LocalDate.parse(dateString, formatter)
-
-    return date.dayOfWeek.name.lowercase().replaceFirstChar { it.uppercase() }
-}
