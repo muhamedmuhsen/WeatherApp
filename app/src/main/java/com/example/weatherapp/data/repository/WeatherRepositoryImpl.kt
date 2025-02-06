@@ -27,10 +27,10 @@ class WeatherRepositoryImpl : WeatherRepository {
                 ) {
 
                     if (response.isSuccessful) {
-                        Log.i("ApiResponseRepo:",response.body().toString())
+                        Log.i("ApiResponseRepoS:",response.body().toString())
                         callback.onSuccess(response.body())
                     } else {
-                        Log.i("ApiResponseRepo:",response.body().toString())
+                        Log.i("ApiResponseRepoF:",response.body().toString())
                         callback.onFailure("Error")
                     }
                 }

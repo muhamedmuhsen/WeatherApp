@@ -18,7 +18,6 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -31,15 +30,14 @@ import androidx.compose.ui.unit.sp
 import com.example.weatherapp.presentation.components.FutureItem
 import com.example.weatherapp.presentation.components.StatusShape
 import com.example.weatherapp.presentation.components.TodayStatusShape
-import com.example.weatherapp.util.coordinates
 import com.example.weatherapp.util.getDayOfWeek
 import com.example.weatherapp.util.weatherState
 
 @Composable
 fun WeatherScreen(viewModel: WeatherViewModel) {
-    LaunchedEffect(key1 = true) {
-        viewModel.fetchData(coordinates)
-    }
+//    LaunchedEffect(key1 = true) {
+//        viewModel.fetchData(coordinates)
+//    }
     val data = viewModel.weatherData.collectAsState().value
     val error = viewModel.error
     Log.i("ApiResponse", "Data:$data")
@@ -160,14 +158,14 @@ fun WeatherScreen(viewModel: WeatherViewModel) {
                 }
             }
         }
-    } else if (error != null) {
-        Box(
-            modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
-        ) {
-            Text(
-                text = error.toString(), color = Color.Red, fontSize = 18.sp
-            )
-        }
+//    } else if (error != null) {
+//        Box(
+//            modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center
+//        ) {
+//            Text(
+//                text = error.toString(), color = Color.Red, fontSize = 18.sp
+//            )
+//        }
     } else {
         Box(
             modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center

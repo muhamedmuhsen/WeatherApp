@@ -8,9 +8,7 @@ import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.LocationServices
 
 
-var coordinates: String=""
-
-fun getLocation(context: Context,activity: Activity) {
+fun getLocation(context: Context,activity: Activity,callback:(String)->Unit){
 
     val fusedLocation = LocationServices.getFusedLocationProviderClient(activity)
 
@@ -32,10 +30,10 @@ fun getLocation(context: Context,activity: Activity) {
     location.addOnSuccessListener {
         if (it != null) {
             Log.i("Coordinates:", "${it.latitude},${it.longitude}")
-            coordinates = "${it.latitude},${it.longitude}"
+            callback("${it.latitude},${it.longitude}")
         }
         else
-            coordinates=Constants.defaultCoordinate
+            callback (Constants.defaultCoordinate)
     }
 
 }

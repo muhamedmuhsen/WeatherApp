@@ -22,18 +22,21 @@ class MainActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
-        getLocation(this, this)
-
         val repository = WeatherRepositoryImpl()
         val factory = WeatherViewModelFactory(repository, application)
         weatherViewModel = ViewModelProvider(this, factory)[WeatherViewModel::class.java]
 
+        getLocation(this, this){coordinates->
+            weatherViewModel.fetchData(coordinates)
+        }
+
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
+
             WeatherAppTheme {
                 Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    val pa = innerPadding
+                    val pad = innerPadding
                     WeatherScreen(weatherViewModel)
                 }
             }

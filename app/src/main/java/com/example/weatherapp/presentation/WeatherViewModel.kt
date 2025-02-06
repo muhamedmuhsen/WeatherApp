@@ -24,13 +24,18 @@ class WeatherViewModel(private val repo: WeatherRepository, application: Applica
         repo.getData(coordinates, object : WeatherCallback {
 
             override fun onSuccess(weatherResponse: WeatherResponse?) {
+
                 Log.i("ApiResponseFromViewModel:", weatherResponse.toString())
                 if (weatherResponse != null)
                     _weatherData.value = weatherResponse
+
             }
 
             override fun onFailure(error: String) {
+
+                Log.i("ApiResponseFromViewModel:", error)
                 _error.value = error
+
             }
         })
     }
