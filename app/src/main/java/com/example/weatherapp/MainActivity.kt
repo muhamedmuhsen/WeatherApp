@@ -29,7 +29,6 @@ class MainActivity : ComponentActivity() {
         getLocation(this, this){coordinates->
             weatherViewModel.fetchData(coordinates)
         }
-
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {

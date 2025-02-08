@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -49,6 +51,7 @@ fun WeatherScreen(viewModel: WeatherViewModel) {
             Box(
                 modifier = Modifier
                     .fillMaxSize()
+                    .verticalScroll(state= rememberScrollState())
                     .background(
                         brush = Brush.horizontalGradient(
                             colors = listOf(
