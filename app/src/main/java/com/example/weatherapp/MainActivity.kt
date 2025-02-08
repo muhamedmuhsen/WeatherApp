@@ -4,9 +4,6 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Scaffold
-import androidx.compose.ui.Modifier
 import androidx.lifecycle.ViewModelProvider
 import com.example.weatherapp.data.repository.WeatherRepositoryImpl
 import com.example.weatherapp.presentation.WeatherScreen
@@ -26,18 +23,14 @@ class MainActivity : ComponentActivity() {
         val factory = WeatherViewModelFactory(repository, application)
         weatherViewModel = ViewModelProvider(this, factory)[WeatherViewModel::class.java]
 
-        getLocation(this, this){coordinates->
+        getLocation(this, this) { coordinates ->
             weatherViewModel.fetchData(coordinates)
         }
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-
             WeatherAppTheme {
-                Scaffold(modifier = Modifier.fillMaxSize()) { innerPadding ->
-                    val pad = innerPadding
-                    WeatherScreen(weatherViewModel)
-                }
+                WeatherScreen(weatherViewModel)
             }
         }
     }

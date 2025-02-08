@@ -47,6 +47,7 @@ fun WeatherScreen(viewModel: WeatherViewModel) {
     if (data != null) {
         val icon = weatherState(data.current.condition.text)
         val day = getDayOfWeek(data.current.last_updated.split(" ")[0])
+        Log.i("Day:",day)
         Scaffold { innerPadding ->
             Box(
                 modifier = Modifier
@@ -94,7 +95,7 @@ fun WeatherScreen(viewModel: WeatherViewModel) {
                         )
                     }
                     Text(
-                        text = data.current.temp_c.toString() + "°C",
+                        text = data.current.temp_c.toString() + "°",
                         fontSize = 64.sp,
                         fontWeight = FontWeight.Bold,
                         color = Color.White,
@@ -105,13 +106,13 @@ fun WeatherScreen(viewModel: WeatherViewModel) {
                         horizontalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            text = "H:" + data.forecast.forecastday[0].day.maxtemp_c + "°C",
+                            text = "H:" + data.forecast.forecastday[0].day.maxtemp_c + "°",
                             color = Color.White,
                             fontSize = 16.sp,
                             modifier = Modifier.padding(horizontal = 8.dp)
                         )
                         Text(
-                            text = "L:" + data.forecast.forecastday[0].day.mintemp_c + "°C",
+                            text = "L:" + data.forecast.forecastday[0].day.mintemp_c + "°",
                             color = Color.White,
                             fontSize = 16.sp
                         )

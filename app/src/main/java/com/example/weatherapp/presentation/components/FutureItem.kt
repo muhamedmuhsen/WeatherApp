@@ -20,16 +20,16 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.weatherapp.domain.model.Forecastday
+import com.example.weatherapp.util.getDayOfWeek
 import com.example.weatherapp.util.weatherState
 
 @Composable
 fun FutureItem(forecast: List<Forecastday>) {
 
-
     LazyColumn(modifier = Modifier.height(200.dp)) {
         itemsIndexed(forecast) { index, _ ->
             //forecast.forEachIndexed {index,_->
-            val day = forecast[index].date.split(" ")[0].slice(1..3)
+            val day = getDayOfWeek(forecast[index].date).slice(0..2)
             val icon = weatherState(forecast[index].day.condition.text)
             Row(
                 Modifier
