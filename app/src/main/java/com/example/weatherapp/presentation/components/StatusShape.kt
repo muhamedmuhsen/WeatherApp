@@ -18,6 +18,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.weatherapp.R
@@ -49,13 +50,11 @@ fun StatusShape(data: WeatherResponse) {
                         .padding(horizontal = 12.dp)
                         .size(36.dp)
                 )
-                Text(
+                TodayInfo(
                     text = data.forecast.forecastday[0].day.daily_chance_of_rain.toString() + "%",
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
-                Text(text = "Rain", color = Color.White, fontSize = 12.sp)
+                TodayInfo(text = "Rain", fontSize = 12.sp)
             }
             Column(
                 verticalArrangement = Arrangement.Center,
@@ -66,13 +65,11 @@ fun StatusShape(data: WeatherResponse) {
                     contentDescription = null,
                     Modifier.size(36.dp)
                 )
-                Text(
-                    text = data.current.wind_kph.toString() + " km/h",
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
+                TodayInfo(
+                    data.current.wind_kph.toString() + " km/h",
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
-                Text(text = "Wind speed", color = Color.White, fontSize = 12.sp)
+                TodayInfo(text = "Wind speed", fontSize = 12.sp)
             }
             Column(
                 verticalArrangement = Arrangement.Center,
@@ -85,14 +82,29 @@ fun StatusShape(data: WeatherResponse) {
                         .padding(horizontal = 12.dp)
                         .size(36.dp)
                 )
-                Text(
+                TodayInfo(
                     text = data.current.humidity.toString() + " %",
-                    color = Color.White,
-                    fontWeight = FontWeight.Bold,
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
-                Text(text = "Humidity", color = Color.White, fontSize = 12.sp)
+                TodayInfo(text = "Humidity", fontSize = 12.sp)
             }
         }
     }
+}
+
+@Composable
+private fun TodayInfo(
+    text: String,
+    fontSize: TextUnit = 14.sp,
+    fontWeight: FontWeight = FontWeight.Bold,
+    color: Color = Color.White,
+    modifier: Modifier = Modifier
+) {
+    Text(
+        text = text,
+        fontSize = fontSize,
+        fontWeight = fontWeight,
+        color = color,
+        modifier = modifier
+    )
 }

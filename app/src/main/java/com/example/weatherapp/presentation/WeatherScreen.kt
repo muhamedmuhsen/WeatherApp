@@ -27,8 +27,11 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.example.weatherapp.domain.model.WeatherResponse
 import com.example.weatherapp.presentation.components.FutureItem
 import com.example.weatherapp.presentation.components.StatusShape
 import com.example.weatherapp.presentation.components.TodayStatusShape
@@ -47,12 +50,12 @@ fun WeatherScreen(viewModel: WeatherViewModel) {
     if (data != null) {
         val icon = weatherState(data.current.condition.text)
         val day = getDayOfWeek(data.current.last_updated.split(" ")[0])
-        Log.i("Day:",day)
+        Log.i("Day:", day)
         Scaffold { innerPadding ->
             Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .verticalScroll(state= rememberScrollState())
+                    .verticalScroll(state = rememberScrollState())
                     .background(
                         brush = Brush.horizontalGradient(
                             colors = listOf(
@@ -61,104 +64,44 @@ fun WeatherScreen(viewModel: WeatherViewModel) {
                         )
                     )
                     .padding(innerPadding)
-                    .padding(horizontal = 8.dp)
+
             ) {
                 // Main Content
                 Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 16.dp),
+                    modifier = Modifier.fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    // Current Weather
-                    Text(
-                        text = data.current.condition.text, color = Color.White, fontSize = 24.sp
-                    )
-                    Image(
-                        painter = painterResource(icon),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .size(150.dp)
-                            .padding(vertical = 16.dp)
-                    )
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = "$day | ", color = Color.White, fontSize = 16.sp
-                        )
-                        Text(
-                            text = " ${data.location.localtime}".split(" ")[2],
-                            color = Color.White,
-                            fontSize = 16.sp
-                        )
-                    }
-                    Text(
-                        text = data.current.temp_c.toString() + "°",
-                        fontSize = 64.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = Color.White,
-                        modifier = Modifier.padding(vertical = 12.dp)
-                    )
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Center
-                    ) {
-                        Text(
-                            text = "H:" + data.forecast.forecastday[0].day.maxtemp_c + "°",
-                            color = Color.White,
-                            fontSize = 16.sp,
-                            modifier = Modifier.padding(horizontal = 8.dp)
-                        )
-                        Text(
-                            text = "L:" + data.forecast.forecastday[0].day.mintemp_c + "°",
-                            color = Color.White,
-                            fontSize = 16.sp
-                        )
-                    }
-                    Spacer(modifier = Modifier.height(12.dp))
 
-                    // Status Shape (Rain, Wind, Humidity)
+                    TopSection(data, icon, day)
+
+                    Spacer(modifier = Modifier.height(8.dp))
+
                     StatusShape(data)
-                    Spacer(modifier = Modifier.height(12.dp))
+
+                    Spacer(modifier = Modifier.height(8.dp))
 
                     // Today's Weather (Hourly)
-                    Text(
-                        text = "Today",
-                        fontSize = 20.sp,
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.align(Alignment.Start)
-                    )
-                    LazyRow(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .height(120.dp)
-                    ) {
+                    DayOrFutureText(text = "Today")
+
+                    LazyRow(modifier = Modifier.fillMaxWidth().height(120.dp)) {
                         items(4) { index ->
                             TodayStatusShape(data, index + 6)
                         }
                     }
-                    Spacer(modifier = Modifier.height(12.dp))
+
+                    Spacer(modifier = Modifier.height(8.dp))
 
                     // Future Forecast (Daily)
-                    Text(
-                        text = "Future",
-                        fontSize = 20.sp,
-                        color = Color.White,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.align(Alignment.Start)
-                    )
+                    DayOrFutureText(text = "Future")
                     // Use a Column for future forecast items
-                    Column(
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        val forecastSize = data.forecast.forecastday.size
-                        Log.i("forecastSize", "size:$forecastSize")
+//                    Column(
+//                        modifier = Modifier.fillMaxWidth()
+//                    ) {
+                    val forecastSize = data.forecast.forecastday.size
+                    Log.i("forecastSize", "size:$forecastSize")
 
-                        FutureItem(data.forecast.forecastday)
-                    }
+                    FutureItem(data.forecast.forecastday)
+                    // }
                 }
             }
         }
@@ -179,7 +122,75 @@ fun WeatherScreen(viewModel: WeatherViewModel) {
     }
 }
 
+@Composable
+private fun TopSection(
+    data: WeatherResponse,
+    icon: Int,
+    day: String
+) {
+    // Current Weather
+    Text(
+        text = data.current.condition.text,fontWeight = FontWeight.SemiBold, color = Color.White, fontSize = 24.sp
+    )
+    Image(
+        painter = painterResource(icon),
+        contentDescription = null,
+        modifier = Modifier
+            .size(150.dp)
+            .padding(vertical = 16.dp)
+    )
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = "$day | ", color = Color.White,  fontSize = 16.sp
+        )
+        Text(
+            text = " ${data.location.localtime}".split(" ")[2],
+            color = Color.White,
+            fontSize = 16.sp
+        )
+    }
+    Text(
+        text = data.current.temp_c.toString() + "°C",
+        fontSize = 64.sp,
+        fontWeight = FontWeight.Bold,
+        color = Color.White,
+        modifier = Modifier.padding(vertical = 8.dp)
+    )
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.Center
+    ) {
+        Text(
+            text = "H:" + data.forecast.forecastday[0].day.maxtemp_c + "°",
+            color = Color.White,
+            fontSize = 16.sp,
+            modifier = Modifier.padding(horizontal = 8.dp)
+        )
+        Text(
+            text = "L:" + data.forecast.forecastday[0].day.mintemp_c + "°",
+            color = Color.White,
+            fontSize = 16.sp
+        )
+    }
+}
 
-
-
-
+@Composable
+private fun DayOrFutureText(
+    text: String,
+    fontSize: TextUnit = 20.sp,
+    color: Color = Color.White,
+    fontWeight: FontWeight = FontWeight.Bold,
+    modifier: Modifier = Modifier.fillMaxWidth().padding(start = 8.dp)
+) {
+    Text(
+        text = text,
+        fontSize = fontSize,
+        color = color,
+        fontWeight = fontWeight,
+        modifier = modifier,
+        textAlign = TextAlign.Start
+    )
+}

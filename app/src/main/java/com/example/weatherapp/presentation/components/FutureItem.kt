@@ -17,6 +17,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.weatherapp.domain.model.Forecastday
@@ -26,7 +27,11 @@ import com.example.weatherapp.util.weatherState
 @Composable
 fun FutureItem(forecast: List<Forecastday>) {
 
-    LazyColumn(modifier = Modifier.height(200.dp)) {
+    LazyColumn(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(200.dp)
+    ) {
         itemsIndexed(forecast) { index, _ ->
             //forecast.forEachIndexed {index,_->
             val day = getDayOfWeek(forecast[index].date).slice(0..2)
@@ -38,9 +43,7 @@ fun FutureItem(forecast: List<Forecastday>) {
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Text(
-                    text = day, fontSize = 14.sp, color = Color.White
-                )
+                FutureInfoText(day)
                 Image(
                     painter = painterResource(icon),
                     contentDescription = null,
@@ -49,26 +52,28 @@ fun FutureItem(forecast: List<Forecastday>) {
                         .size(45.dp)
                 )
                 Spacer(Modifier.width(12.dp))
-                Text(
-                    text = forecast[index].day.condition.text,
-                    modifier = Modifier
-                        .weight(1f),
-                    fontSize = 14.sp,
-                    color = Color.White
+                FutureInfoText(forecast[index].day.condition.text)
+                FutureInfoText(
+                    forecast[index].day.maxtemp_c.toString() + "°",
+                    modifier = Modifier.padding(end = 16.dp)
                 )
-                Text(
-                    text = forecast[index].day.maxtemp_c.toString() + "°",
-                    modifier = Modifier.padding(end = 16.dp),
-                    fontSize = 14.sp,
-                    color = Color.White
-                )
-                Text(
-                    text = forecast[index].day.mintemp_c.toString() + "°",
-                    modifier = Modifier,
-                    fontSize = 14.sp,
-                    color = Color.White
-                )
+                FutureInfoText(forecast[index].day.mintemp_c.toString() + "°")
             }
         }
     }
+}
+
+@Composable
+fun FutureInfoText(
+    text: String,
+    fontSize: TextUnit = 14.sp,
+    color: Color = Color.White,
+    modifier: Modifier = Modifier
+) {
+    Text(
+        text = text,
+        fontSize = fontSize,
+        color = color,
+        modifier = modifier
+    )
 }
